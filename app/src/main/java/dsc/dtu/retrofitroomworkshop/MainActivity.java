@@ -1,9 +1,11 @@
 package dsc.dtu.retrofitroomworkshop;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.lifecycle.Observer;
 
 import android.content.Context;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -37,6 +39,15 @@ public class MainActivity extends AppCompatActivity {
         launchPadService = Provider.getLaunchPadService();
         launchPadDao = Provider.getLaunchPadDao();
 
+        launchPadDao.getAllLaunchPads().observe(this, new Observer<List<LaunchPadDb>>() {
+            @Override
+            public void onChanged(List<LaunchPadDb> launchPadDbs) {
+                Toast.makeText(context, "Received new data from Database", Toast.LENGTH_SHORT).show();
+                String text = listOfLaunchPadsToString(launchPadDbs);
+                setResponseText(text);
+            }
+        });
+
         getLaunchPads();
     }
 
@@ -49,18 +60,15 @@ public class MainActivity extends AppCompatActivity {
             public void onResponse(Call<List<LaunchPadApi>> call, Response<List<LaunchPadApi>> response) {
                 List<LaunchPadApi> launchPads = response.body();
                 if (launchPads != null) {
-                    String text = listOfLaunchPadsToString(launchPads);
-                    responseTextView.setText(text);
-                    Toast.makeText(context, "Saving data to DB", Toast.LENGTH_LONG).show();
                     saveLaunchPads(launchPads);
                 } else {
-                    responseTextView.setText("An Error Occurred");
+                    setResponseText("An Error Occurred");
                 }
             }
 
             @Override
             public void onFailure(Call<List<LaunchPadApi>> call, Throwable t) {
-                responseTextView.setText("An Error Occured");
+                setResponseText("An Error Occurred");
                 t.printStackTrace();
             }
         });
@@ -70,12 +78,12 @@ public class MainActivity extends AppCompatActivity {
      * A helper method to save a list of LaunchPads received from the API to the database
      * on a background thread.
      */
-    private void saveLaunchPads(List<LaunchPadApi> launchPads) {
-        final List<LaunchPadDb> launchPadDbs = convertToLaunchPadDbs(launchPads);
-
-        AppExecutors.getBackgroundExecutor().submit(new Runnable() {
+    private void saveLaunchPads(final List<LaunchPadApi> launchPads) {
+        Toast.makeText(context, "Saving data to DB", Toast.LENGTH_SHORT).show();
+        AppExecutors.getBackgroundExecutor().execute(new Runnable() {
             @Override
             public void run() {
+                List<LaunchPadDb> launchPadDbs = convertToLaunchPadDbs(launchPads);
                 launchPadDao.saveAllLaunchPads(launchPadDbs);
             }
         });
@@ -97,14 +105,25 @@ public class MainActivity extends AppCompatActivity {
     /**
      * A helper method to convert a List of LaunchPads into a String
      */
-    private String listOfLaunchPadsToString(List<LaunchPadApi> launchPads) {
+    private String listOfLaunchPadsToString(List<LaunchPadDb> launchPads) {
 
         StringBuilder sb = new StringBuilder();
 
-        for (LaunchPadApi launchPadApi : launchPads) {
-            sb.append(launchPadApi.name).append("\n");
+        for (LaunchPadDb launchPadDb : launchPads) {
+            sb.append(launchPadDb.name).append("\n");
         }
 
         return sb.toString();
+    }
+
+    /**
+     * A helper method to set some text to response TextView.
+     */
+    private void setResponseText(String text) {
+        if (TextUtils.isEmpty(text)) {
+            responseTextView.setText("No data available");
+        } else {
+            responseTextView.setText(text);
+        }
     }
 }

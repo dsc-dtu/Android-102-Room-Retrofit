@@ -14,6 +14,9 @@ public class Converters {
 
     @TypeConverter
     public String listOfStringToString(List<String> list) {
+
+        if (list == null) { return ""; }
+
         StringBuilder sb = new StringBuilder();
         for (String str : list) {
             sb.append(str).append(";");
