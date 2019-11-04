@@ -3,10 +3,13 @@ package dsc.dtu.retrofitroomworkshop;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.os.Bundle;
-import android.util.Log;
 import android.widget.TextView;
 
 import java.util.List;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -20,10 +23,25 @@ public class MainActivity extends AppCompatActivity {
         responseTextView = findViewById(R.id.responseTextView);
 
         LaunchPadService launchPadService = Provider.getLaunchPadService();
-        List<LaunchPad> launchPads = launchPadService.getAllLaunchPads();
 
-        String text = listOfLaunchPadsToString(launchPads);
-        responseTextView.setText(text);
+        launchPadService.getAllLaunchPads().enqueue(new Callback<List<LaunchPad>>() {
+            @Override
+            public void onResponse(Call<List<LaunchPad>> call, Response<List<LaunchPad>> response) {
+                List<LaunchPad> launchPads = response.body();
+                if (launchPads != null) {
+                    String text = listOfLaunchPadsToString(launchPads);
+                    responseTextView.setText(text);
+                } else {
+                    responseTextView.setText("An Error Occurred");
+                }
+            }
+
+            @Override
+            public void onFailure(Call<List<LaunchPad>> call, Throwable t) {
+                responseTextView.setText("An Error Occured");
+                t.printStackTrace();
+            }
+        });
     }
 
     /**
