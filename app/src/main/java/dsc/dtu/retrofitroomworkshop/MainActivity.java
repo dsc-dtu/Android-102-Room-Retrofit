@@ -7,6 +7,8 @@ import android.widget.TextView;
 
 import java.util.List;
 
+import dsc.dtu.retrofitroomworkshop.api.LaunchPadApi;
+import dsc.dtu.retrofitroomworkshop.api.LaunchPadService;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -24,10 +26,10 @@ public class MainActivity extends AppCompatActivity {
 
         LaunchPadService launchPadService = Provider.getLaunchPadService();
 
-        launchPadService.getAllLaunchPads().enqueue(new Callback<List<LaunchPad>>() {
+        launchPadService.getAllLaunchPads().enqueue(new Callback<List<LaunchPadApi>>() {
             @Override
-            public void onResponse(Call<List<LaunchPad>> call, Response<List<LaunchPad>> response) {
-                List<LaunchPad> launchPads = response.body();
+            public void onResponse(Call<List<LaunchPadApi>> call, Response<List<LaunchPadApi>> response) {
+                List<LaunchPadApi> launchPads = response.body();
                 if (launchPads != null) {
                     String text = listOfLaunchPadsToString(launchPads);
                     responseTextView.setText(text);
@@ -37,7 +39,7 @@ public class MainActivity extends AppCompatActivity {
             }
 
             @Override
-            public void onFailure(Call<List<LaunchPad>> call, Throwable t) {
+            public void onFailure(Call<List<LaunchPadApi>> call, Throwable t) {
                 responseTextView.setText("An Error Occured");
                 t.printStackTrace();
             }
@@ -47,12 +49,12 @@ public class MainActivity extends AppCompatActivity {
     /**
      * A helper method to convert a List of LaunchPads into a String
      */
-    private String listOfLaunchPadsToString(List<LaunchPad> launchPads) {
+    private String listOfLaunchPadsToString(List<LaunchPadApi> launchPads) {
 
         StringBuilder sb = new StringBuilder();
 
-        for (LaunchPad launchPad: launchPads) {
-            sb.append(launchPad.name).append("\n");
+        for (LaunchPadApi launchPadApi : launchPads) {
+            sb.append(launchPadApi.name).append("\n");
         }
 
         return sb.toString();

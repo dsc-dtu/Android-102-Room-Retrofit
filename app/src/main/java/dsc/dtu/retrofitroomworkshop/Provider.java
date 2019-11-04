@@ -1,5 +1,12 @@
 package dsc.dtu.retrofitroomworkshop;
 
+import android.content.Context;
+
+import androidx.room.Room;
+
+import dsc.dtu.retrofitroomworkshop.api.LaunchPadService;
+import dsc.dtu.retrofitroomworkshop.database.LaunchPadDao;
+import dsc.dtu.retrofitroomworkshop.database.LaunchPadDatabase;
 import retrofit2.Retrofit;
 import retrofit2.converter.moshi.MoshiConverterFactory;
 
@@ -27,7 +34,7 @@ public class Provider {
 
     /**
      * A static final field to hold an instance of the LaunchPad service created by Retrofit for us.
-     *
+     * <p>
      * Creating a service instance is an expensive operation, so we should only keep around one instance
      * of it.
      */
@@ -38,4 +45,26 @@ public class Provider {
         return launchPadService;
     }
 
+
+    /**
+     * Stores a reference to the database.
+     */
+    private static LaunchPadDatabase database;
+
+    /**
+     * Creates and stores a reference to LaunchPadDatabase.
+     * This method must be called before attempting to access any DAO object.
+     */
+    public static void createDatabase(Context context) {
+        database = Room
+                .databaseBuilder(context, LaunchPadDatabase.class, "launchpad-db")
+                .build();
+    }
+
+    /**
+     * Returns an instance of LaunchPadDao from LaunchPadDatabase
+     */
+    public static LaunchPadDao getLaunchPadDao() {
+        return database.getLaunchPadDao();
+    }
 }

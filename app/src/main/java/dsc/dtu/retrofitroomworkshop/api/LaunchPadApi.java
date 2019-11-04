@@ -1,4 +1,4 @@
-package dsc.dtu.retrofitroomworkshop;
+package dsc.dtu.retrofitroomworkshop.api;
 
 import androidx.annotation.NonNull;
 
@@ -7,9 +7,9 @@ import com.squareup.moshi.Json;
 import java.util.List;
 
 /**
- * A simple Java model class to represent a LaunchPad object parsed from the received JSON.
+ * A simple Java model class to represent a LaunchPadApi object parsed from the received JSON.
  */
-public class LaunchPad {
+public class LaunchPadApi {
 
     @Json(name = "id")
     public final int id;
@@ -30,7 +30,7 @@ public class LaunchPad {
     public final String wikipedia;
 
 
-    public LaunchPad(int id, String name, List<String> vehiclesLaunched, int attemptedLaunches, int successfulLaunches, String wikipedia) {
+    public LaunchPadApi(int id, String name, List<String> vehiclesLaunched, int attemptedLaunches, int successfulLaunches, String wikipedia) {
         this.id = id;
         this.name = name;
         this.vehiclesLaunched = vehiclesLaunched;

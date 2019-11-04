@@ -1,4 +1,4 @@
-package dsc.dtu.retrofitroomworkshop;
+package dsc.dtu.retrofitroomworkshop.api;
 
 import java.util.List;
 
@@ -27,6 +27,6 @@ public interface LaunchPadService {
      * LaunchPads.
      */
     @GET("launchpads")
-    Call<List<LaunchPad>> getAllLaunchPads();
+    Call<List<LaunchPadApi>> getAllLaunchPads();
 
 }
