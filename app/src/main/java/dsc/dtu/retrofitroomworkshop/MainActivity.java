@@ -34,7 +34,7 @@ public class MainActivity extends AppCompatActivity {
         StringBuilder sb = new StringBuilder();
 
         for (LaunchPad launchPad: launchPads) {
-            sb.append(launchPad.toString()).append("\n");
+            sb.append(launchPad.name).append("\n");
         }
 
         return sb.toString();

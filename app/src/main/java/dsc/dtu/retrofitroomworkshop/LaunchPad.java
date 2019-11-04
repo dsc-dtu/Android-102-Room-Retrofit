@@ -1,5 +1,9 @@
 package dsc.dtu.retrofitroomworkshop;
 
+import androidx.annotation.NonNull;
+
+import com.squareup.moshi.Json;
+
 import java.util.List;
 
 /**
@@ -7,45 +11,32 @@ import java.util.List;
  */
 public class LaunchPad {
 
-    private final int id;
-    private final String name;
-    private final List<String> vehiclesLaunched;
-    private final List<String> attemptedLaunches;
-    private final int successfulLaunches;
-    private final String wikipedia;
+    @Json(name = "id")
+    public final int id;
+
+    @Json(name = "name")
+    public final String name;
+
+    @Json(name = "vehicles_launches")
+    public final List<String> vehiclesLaunched;
+
+    @Json(name = "attempted_launches")
+    public final int attemptedLaunches;
+
+    @Json(name = "successful_launches")
+    public final int successfulLaunches;
+
+    @Json(name = "wikipedia")
+    public final String wikipedia;
 
 
-    public LaunchPad(int id, String name, List<String> vehiclesLaunched, List<String> attemptedLaunches, int successfulLaunches, String wikipedia) {
+    public LaunchPad(int id, String name, List<String> vehiclesLaunched, int attemptedLaunches, int successfulLaunches, String wikipedia) {
         this.id = id;
         this.name = name;
         this.vehiclesLaunched = vehiclesLaunched;
         this.attemptedLaunches = attemptedLaunches;
         this.successfulLaunches = successfulLaunches;
         this.wikipedia = wikipedia;
-    }
-
-    public int getId() {
-        return id;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public List<String> getVehiclesLaunched() {
-        return vehiclesLaunched;
-    }
-
-    public List<String> getAttemptedLaunches() {
-        return attemptedLaunches;
-    }
-
-    public int getSuccessfulLaunches() {
-        return successfulLaunches;
-    }
-
-    public String getWikipedia() {
-        return wikipedia;
     }
 }
 

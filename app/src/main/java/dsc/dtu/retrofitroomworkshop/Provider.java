@@ -1,6 +1,7 @@
 package dsc.dtu.retrofitroomworkshop;
 
 import retrofit2.Retrofit;
+import retrofit2.converter.moshi.MoshiConverterFactory;
 
 /**
  * A utility class to hold instances of Retrofit, Network Services and some configuration
@@ -21,6 +22,7 @@ public class Provider {
      */
     private static final Retrofit retrofit = new Retrofit.Builder()
             .baseUrl(BASE_URL)
+            .addConverterFactory(MoshiConverterFactory.create())
             .build();
 
     /**
